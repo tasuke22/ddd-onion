@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: Asia/Tokyo
+      LANG: C.UTF-8
+    command: --collation-server=utf8mb4_general_ci
+  app:
+    build:
+      context: .
+      dockerfile: ./ops/docker/app/Dockerfile
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./
+        target: /data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - db
+
+volumes:
+  db-store:
+    driver: local
