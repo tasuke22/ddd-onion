@@ -1,0 +1,83 @@
+###
+# アプリケーションのヘルスチェック
+GET http://localhost:8080/v1/health
+
+###
+# ユーザーの新規登録
+POST http://localhost:8080/v1/users/save
+
+{
+  "name": "ユーザー名",
+  "email": "user@example.com",
+  "password": "securepassword1",
+  "profile": "プロフィール説明文",
+  "skills": [
+    {
+      "evaluation": 5,
+      "years": 3,
+      "tag_name": "Go"
+    },
+    {
+      "evaluation": 4,
+      "years": 2,
+      "tag_name": "JavaScript"
+    }
+  ],
+  "careers": [
+    {
+      "detail": "ソフトウェアエンジニア",
+      "start_year": 2018,
+      "end_year": 2020
+    },
+    {
+      "detail": "シニアソフトウェアエンジニア",
+      "start_year": 2020,
+      "end_year": 2022
+    }
+  ]
+}
+
+###
+# ユーザーの新規登録
+POST http://localhost:8080/v1/users/save
+
+{
+  "name": "新しいユーザー名",
+  "email": "newuser@example.com",
+  "password": "newSecurePassword123",
+  "profile": "新しいプロフィール説明。技術者としての経験をさらに深め、チームでのコラボレーションを重視しています。",
+  "skills": [
+    {
+      "evaluation": 5,
+      "years": 4,
+      "tag_name": "Python"
+    },
+    {
+      "evaluation": 4,
+      "years": 3,
+      "tag_name": "React"
+    },
+    {
+      "evaluation": 3,
+      "years": 2,
+      "tag_name": "Docker"
+    }
+  ],
+  "careers": [
+    {
+      "detail": "フロントエンド開発者",
+      "start_year": 2019,
+      "end_year": 2021
+    },
+    {
+      "detail": "バックエンド開発者",
+      "start_year": 2021,
+      "end_year": 2023
+    },
+    {
+      "detail": "DevOps エンジニア",
+      "start_year": 2023,
+      "end_year": 2024
+    }
+  ]
+}

@@ -4,6 +4,6 @@ package user
 import "context"
 
 type UserRepository interface {
-	Store(ctx context.Context, user *User) error
+	Save(ctx context.Context, user *User) error
 	FindByName(ctx context.Context, name string) (*User, error)
 }

@@ -15,8 +15,8 @@ func TestNewSkill(t *testing.T) {
 		name       string
 		id         string
 		tagID      string
-		evaluation int
-		year       int
+		evaluation int32
+		year       int32
 		wantError  bool
 	}{
 		{

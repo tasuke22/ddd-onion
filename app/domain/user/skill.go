@@ -7,8 +7,8 @@ import (
 type Skill struct {
 	id         string
 	tagID      string
-	evaluation int
-	years      int
+	evaluation int32
+	years      int32
 }
 
 func (s *Skill) ID() string {
@@ -19,15 +19,15 @@ func (s *Skill) TagID() string {
 	return s.tagID
 }
 
-func (s *Skill) Evaluation() int {
+func (s *Skill) Evaluation() int32 {
 	return s.evaluation
 }
 
-func (s *Skill) Years() int {
+func (s *Skill) Years() int32 {
 	return s.years
 }
 
-func newSkill(id string, tagID string, evaluation int, year int) (*Skill, error) {
+func newSkill(id string, tagID string, evaluation, year int32) (*Skill, error) {
 	// 評価（evaluation）のバリデーション
 	if evaluation < minEvaluation || evaluation > maxEvaluation {
 		return nil, xerrors.Errorf("評価は%dから%dの間でなければなりません", minEvaluation, maxEvaluation)

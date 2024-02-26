@@ -15,8 +15,8 @@ func TestNewCareer(t *testing.T) {
 		name      string
 		id        string
 		detail    string
-		startYear int
-		endYear   int
+		startYear int32
+		endYear   int32
 		wantError bool
 	}{
 		{

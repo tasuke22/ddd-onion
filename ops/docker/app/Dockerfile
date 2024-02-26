@@ -7,6 +7,7 @@ WORKDIR /data/app
 
 RUN go install github.com/go-delve/delve/cmd/dlv@latest && \
     go install go.uber.org/mock/mockgen@v0.3.0 && \
+    go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.23.0 && \
     go install github.com/cosmtrek/air@latest
 
 CMD ["air", "-c", ".air.toml"]

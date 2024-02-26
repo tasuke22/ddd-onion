@@ -8,8 +8,8 @@ import (
 type Career struct {
 	id        string
 	detail    string
-	startYear int
-	endYear   int
+	startYear int32
+	endYear   int32
 }
 
 func (c *Career) ID() string {
@@ -20,15 +20,15 @@ func (c *Career) Detail() string {
 	return c.detail
 }
 
-func (c *Career) StartYear() int {
+func (c *Career) StartYear() int32 {
 	return c.startYear
 }
 
-func (c *Career) EndYear() int {
+func (c *Career) EndYear() int32 {
 	return c.endYear
 }
 
-func newCareer(id string, detail string, startYear, endYear int) (*Career, error) {
+func newCareer(id string, detail string, startYear, endYear int32) (*Career, error) {
 	// 詳細の長さのバリデーション
 	if utf8.RuneCountInString(detail) > maxDetailLength {
 		return nil, xerrors.Errorf("詳細は%d文字以下でなければなりません", maxDetailLength)
