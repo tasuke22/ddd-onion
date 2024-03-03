@@ -9,6 +9,27 @@ import (
 	"context"
 )
 
+const findByID = `-- name: FindByUserID :one
+SELECT id, email, password, name, profile, created_at, updated_at
+FROM users
+WHERE id = ?
+`
+
+func (q *Queries) FindByID(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRowContext(ctx, findByID, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Password,
+		&i.Name,
+		&i.Profile,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const findByName = `-- name: FindByName :one
 SELECT id, email, password, name, profile, created_at, updated_at
 FROM users

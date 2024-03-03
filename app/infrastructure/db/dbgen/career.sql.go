@@ -9,6 +9,43 @@ import (
 	"context"
 )
 
+const findCareersByUserID = `-- name: FindCareersByUserID :many
+SELECT id, user_id, detail, start_year, end_year, created_at, updated_at
+FROM careers
+WHERE user_id = ?
+`
+
+func (q *Queries) FindCareersByUserID(ctx context.Context, userID string) ([]Career, error) {
+	rows, err := q.db.QueryContext(ctx, findCareersByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Career{}
+	for rows.Next() {
+		var i Career
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Detail,
+			&i.StartYear,
+			&i.EndYear,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const upsertCareer = `-- name: UpsertCareer :exec
 INSERT INTO careers (id,
                      user_id,

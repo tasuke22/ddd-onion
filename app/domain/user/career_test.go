@@ -63,7 +63,7 @@ func TestNewCareer(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := newCareer(test.id, test.detail, test.startYear, test.endYear)
+			_, err := NewCareer(test.id, test.detail, test.startYear, test.endYear)
 			if test.wantError {
 				assert.Error(t, err)
 			} else {

@@ -9,8 +9,11 @@ import (
 )
 
 type Querier interface {
+	FindByID(ctx context.Context, id string) (User, error)
 	FindByName(ctx context.Context, name string) (User, error)
 	FindByNames(ctx context.Context, names []string) ([]FindByNamesRow, error)
+	FindCareersByUserID(ctx context.Context, userID string) ([]Career, error)
+	FindSkillsByUserID(ctx context.Context, userID string) ([]Skill, error)
 	UpsertCareer(ctx context.Context, arg UpsertCareerParams) error
 	UpsertSkill(ctx context.Context, arg UpsertSkillParams) error
 	UpsertTag(ctx context.Context, arg UpsertTagParams) error

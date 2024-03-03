@@ -9,6 +9,43 @@ import (
 	"context"
 )
 
+const findSkillsByUserID = `-- name: FindSkillsByUserID :many
+SELECT id, user_id, tag_id, evaluation, years, created_at, updated_at
+FROM skills
+WHERE user_id = ?
+`
+
+func (q *Queries) FindSkillsByUserID(ctx context.Context, userID string) ([]Skill, error) {
+	rows, err := q.db.QueryContext(ctx, findSkillsByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Skill{}
+	for rows.Next() {
+		var i Skill
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.TagID,
+			&i.Evaluation,
+			&i.Years,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const upsertSkill = `-- name: UpsertSkill :exec
 INSERT INTO skills (id,
                     user_id,

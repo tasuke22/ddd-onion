@@ -63,7 +63,7 @@ func TestNewSkill(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := newSkill(test.id, test.tagID, test.evaluation, test.year)
+			_, err := NewSkill(test.id, test.tagID, test.evaluation, test.year)
 			if test.wantError {
 				assert.Error(t, err)
 			} else {

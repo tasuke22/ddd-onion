@@ -19,3 +19,8 @@ UPDATE
     evaluation = sqlc.arg(evaluation),
     years = sqlc.arg(years),
     updated_at = NOW();
+
+-- name: FindSkillsByUserID :many
+SELECT *
+FROM skills
+WHERE user_id = ?;

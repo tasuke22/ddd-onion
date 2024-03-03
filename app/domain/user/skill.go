@@ -27,7 +27,7 @@ func (s *Skill) Years() int32 {
 	return s.years
 }
 
-func newSkill(id string, tagID string, evaluation, year int32) (*Skill, error) {
+func NewSkill(id string, tagID string, evaluation, year int32) (*Skill, error) {
 	// 評価（evaluation）のバリデーション
 	if evaluation < minEvaluation || evaluation > maxEvaluation {
 		return nil, xerrors.Errorf("評価は%dから%dの間でなければなりません", minEvaluation, maxEvaluation)
@@ -45,6 +45,10 @@ func newSkill(id string, tagID string, evaluation, year int32) (*Skill, error) {
 		evaluation: evaluation,
 		years:      year,
 	}, nil
+}
+
+func ReconstructSkill(id string, tagID string, evaluation, year int32) (*Skill, error) {
+	return NewSkill(id, tagID, evaluation, year)
 }
 
 const (

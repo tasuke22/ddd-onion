@@ -20,3 +20,7 @@ UPDATE
     end_year = sqlc.arg(end_year),
     updated_at = NOW();
 
+-- name: FindCareersByUserID :many
+SELECT *
+FROM careers
+WHERE user_id = ?;

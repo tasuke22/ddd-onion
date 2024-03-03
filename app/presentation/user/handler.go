@@ -7,14 +7,17 @@ import (
 )
 
 type handler struct {
-	saveUserUseCase *userUseCase.SaveUserUseCase
+	saveUserUseCase   *userUseCase.SaveUserUseCase
+	updateUserUseCase *userUseCase.UpdateUserUseCase
 }
 
 func NewHandler(
 	saveUserUseCase *userUseCase.SaveUserUseCase,
+	updateUserUseCase *userUseCase.UpdateUserUseCase,
 ) handler {
 	return handler{
-		saveUserUseCase: saveUserUseCase,
+		saveUserUseCase:   saveUserUseCase,
+		updateUserUseCase: updateUserUseCase,
 	}
 }
 
@@ -65,4 +68,61 @@ func (h handler) convertCareerRequestsToCareerInputDtos(requests []CareerRequest
 		}
 	}
 	return careers
+}
+
+func (h handler) UpdateUser(ctx *gin.Context) {
+	var request UpdateUserRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		settings.ReturnError(ctx, err)
+		return
+	}
+
+	skillsRequests := h.convertUpdateSkillRequestsToUpdateSkillInputDtos(request.Skills)
+	careersRequests := h.convertUpdateCareerRequestsToUpdateCareerInputDtos(request.Careers)
+
+	err := h.updateUserUseCase.Run(ctx, &userUseCase.UpdateUserUseCaseInputDto{
+		UserID:   request.UserID,
+		Name:     request.Name,
+		Email:    request.Email,
+		Password: request.Password,
+		Profile:  request.Profile,
+		Skills:   skillsRequests,
+		Careers:  careersRequests,
+	})
+	if err != nil {
+		settings.ReturnError(ctx, err)
+		return
+	}
+
+	settings.ReturnStatusNoContent(ctx)
+}
+
+// UpdateSkillRequest から UpdateSkillDto への変換
+func (h handler) convertUpdateSkillRequestsToUpdateSkillInputDtos(skills []UpdateSkillRequest) []userUseCase.UpdateSkillDto {
+	var skillsDtos []userUseCase.UpdateSkillDto
+	for _, skill := range skills {
+		skillDto := userUseCase.UpdateSkillDto{
+			ID:         skill.ID,
+			TagID:      skill.TagID,
+			Evaluation: skill.Evaluation,
+			Years:      skill.Years,
+		}
+		skillsDtos = append(skillsDtos, skillDto)
+	}
+	return skillsDtos
+}
+
+// UpdateCareerRequest から UpdateCareerDto への変換
+func (h handler) convertUpdateCareerRequestsToUpdateCareerInputDtos(careers []UpdateCareerRequest) []userUseCase.UpdateCareerDto {
+	var careersDtos []userUseCase.UpdateCareerDto
+	for _, career := range careers {
+		careerDto := userUseCase.UpdateCareerDto{
+			ID:        career.ID,
+			Detail:    career.Detail,
+			StartYear: career.StartYear,
+			EndYear:   career.EndYear,
+		}
+		careersDtos = append(careersDtos, careerDto)
+	}
+	return careersDtos
 }
