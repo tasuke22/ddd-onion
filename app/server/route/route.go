@@ -22,7 +22,10 @@ func userRoute(r *gin.RouterGroup) {
 	tagRepository := repository.NewTagRepository()
 	h := userPre.NewHandler(
 		userUse.NewUserUseCase(userRepository, tagRepository),
+		userUse.NewUpdateUserUseCase(userRepository, tagRepository),
 	)
 	group := r.Group("/users")
+
 	group.POST("/save", h.SaveUser)
+	group.POST("/update", h.UpdateUser)
 }

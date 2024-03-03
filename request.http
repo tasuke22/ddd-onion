@@ -81,3 +81,43 @@ POST http://localhost:8080/v1/users/save
     }
   ]
 }
+
+###
+# ユーザーの更新
+POST http://localhost:8080/v1/users/update
+
+{
+  "user_id": "01HQJ1B15V28C9NZC4Z0H1JEKS",
+  "name": "山田 太郎太郎",
+  "email": "taro.yamada@example.com",
+  "password": "newpassword123",
+  "profile": "経験豊富なソフトウェアエンジニアです。",
+  "skills": [
+    {
+      "skill_id": "skill01dfa",
+      "tag_id": "01HQJ18F981Y2R7B4TBP0J8ACX",
+      "evaluation": 5,
+      "years": 1
+    },
+    {
+      "skill_id": "skill02dfa",
+      "tag_id": "01HQJ18F981Y2R7B4TBP0J8ACX",
+      "evaluation": 4,
+      "years": 5
+    }
+  ],
+  "careers": [
+    {
+      "career_id": "career0121",
+      "detail": "ソフトウェア開発者として5年間勤務。",
+      "start_year": 2015,
+      "end_year": 2020
+    },
+    {
+      "career_id": "career02ffa",
+      "detail": "プロジェクトマネージャーとして3年間勤務。",
+      "start_year": 2020,
+      "end_year": 2023
+    }
+  ]
+}

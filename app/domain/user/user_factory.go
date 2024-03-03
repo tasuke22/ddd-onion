@@ -27,7 +27,7 @@ func Create(
 	// キャリアのインスタンスを作成
 	careers := make([]Career, len(careersDto))
 	for i, rc := range careersDto {
-		c, err := newCareer(
+		c, err := NewCareer(
 			ulid.NewULID(),
 			rc.Detail,
 			rc.StartYear,
@@ -43,7 +43,7 @@ func Create(
 	// タグIDのインスタンスを作成
 	skills := make([]Skill, len(skillsDto))
 	for i, sd := range skillsDto {
-		s, err := newSkill(
+		s, err := NewSkill(
 			ulid.NewULID(),
 			sd.TagID,
 			sd.Evaluation,

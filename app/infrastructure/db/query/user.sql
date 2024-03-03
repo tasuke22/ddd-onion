@@ -24,3 +24,8 @@ UPDATE
 SELECT *
 FROM users
 WHERE name = ?;
+
+-- name: FindByUserID :one
+SELECT *
+FROM users
+WHERE id = ?;
