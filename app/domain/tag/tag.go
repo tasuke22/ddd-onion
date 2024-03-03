@@ -17,13 +17,23 @@ func (t *Tag) Name() string {
 func NewTag(
 	name string,
 ) (*Tag, error) {
-	return &Tag{
-		id:   ulid.NewULID(),
-		name: name,
-	}, nil
+	return newTag(
+		ulid.NewULID(),
+		name,
+	)
 }
 
 func ReconstructTag(
+	id string,
+	name string,
+) (*Tag, error) {
+	return newTag(
+		id,
+		name,
+	)
+}
+
+func newTag(
 	id string,
 	name string,
 ) (*Tag, error) {

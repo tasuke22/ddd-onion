@@ -3,14 +3,16 @@ package route
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tasuke/go-onion/infrastructure/repository"
-	"github.com/tasuke/go-onion/presentation/health_controller"
+	"github.com/tasuke/go-onion/presentation/health_handler"
+	"github.com/tasuke/go-onion/presentation/settings"
 	userPre "github.com/tasuke/go-onion/presentation/user"
 	userUse "github.com/tasuke/go-onion/usecase/user"
 )
 
 func InitRoute(api *gin.Engine) {
+	api.Use(settings.ErrorHandler())
 	v1 := api.Group("/v1")
-	v1.GET("/health", health_controller.HealthCheck)
+	v1.GET("/health", health_handler.HealthCheck)
 
 	{
 		userRoute(v1)
@@ -26,6 +28,6 @@ func userRoute(r *gin.RouterGroup) {
 	)
 	group := r.Group("/users")
 
-	group.POST("/save", h.SaveUser)
+	group.POST("/register", h.SaveUser)
 	group.POST("/update", h.UpdateUser)
 }

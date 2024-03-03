@@ -27,7 +27,6 @@ func Run(ctx context.Context, conf *config.Config) {
 		WriteTimeout:      10 * time.Minute,
 	}
 	go func() {
-		// srv.Shutdownが呼ばれるとhttp.ErrServerClosedを返すのでこれは無視する
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			panic(err)
 		}

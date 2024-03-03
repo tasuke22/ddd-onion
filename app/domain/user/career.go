@@ -1,7 +1,9 @@
 package user
 
 import (
-	"golang.org/x/xerrors"
+	errDomain "github.com/tasuke/go-onion/domain/error"
+	"github.com/tasuke/go-pkg/ulid"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -28,23 +30,41 @@ func (c *Career) EndYear() int32 {
 	return c.endYear
 }
 
-func NewCareer(id string, detail string, startYear, endYear int32) (*Career, error) {
+func NewCareer(detail string, startYear, endYear int32) (*Career, error) {
+	return newCareer(
+		ulid.NewULID(),
+		detail,
+		startYear,
+		endYear,
+	)
+}
+
+func ReconstructCareer(id string, detail string, startYear, endYear int32) (*Career, error) {
+	return newCareer(
+		id,
+		detail,
+		startYear,
+		endYear,
+	)
+}
+
+func newCareer(id string, detail string, startYear, endYear int32) (*Career, error) {
 	// 詳細の長さのバリデーション
 	if utf8.RuneCountInString(detail) > maxDetailLength {
-		return nil, xerrors.Errorf("詳細は%d文字以下でなければなりません", maxDetailLength)
+		return nil, errDomain.NewError("詳細は" + strconv.Itoa(maxDetailLength) + "文字以下でなければなりません")
 	}
 
 	// 西暦のバリデーション
 	if startYear < minValidYear {
-		return nil, xerrors.Errorf("開始年は%d年以上でなければなりません", minValidYear)
+		return nil, errDomain.NewError("開始年は" + strconv.Itoa(minValidYear) + "年以上でなければなりません")
 	}
 	if endYear < minValidYear {
-		return nil, xerrors.Errorf("終了年は%d年以上でなければなりません", minValidYear)
+		return nil, errDomain.NewError("終了年は" + strconv.Itoa(minValidYear) + "年以上でなければなりません")
 	}
 
 	// 西暦の範囲のバリデーション
 	if endYear < startYear {
-		return nil, xerrors.New("終了年は開始年以上でなければなりません")
+		return nil, errDomain.NewError("終了年は開始年以上でなければなりません")
 	}
 
 	// Career オブジェクトの生成
@@ -54,10 +74,6 @@ func NewCareer(id string, detail string, startYear, endYear int32) (*Career, err
 		startYear: startYear,
 		endYear:   endYear,
 	}, nil
-}
-
-func ReconstructCareer(id string, detail string, startYear, endYear int32) (*Career, error) {
-	return NewCareer(id, detail, startYear, endYear)
 }
 
 const (

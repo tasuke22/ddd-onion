@@ -18,7 +18,7 @@ type SkillDto struct {
 func Create(
 	name string,
 	email string,
-	reqPassword string,
+	password string,
 	profile string,
 	careersDto []CareerDto,
 	skillsDto []SkillDto,
@@ -28,7 +28,6 @@ func Create(
 	careers := make([]Career, len(careersDto))
 	for i, rc := range careersDto {
 		c, err := NewCareer(
-			ulid.NewULID(),
 			rc.Detail,
 			rc.StartYear,
 			rc.EndYear,
@@ -44,7 +43,6 @@ func Create(
 	skills := make([]Skill, len(skillsDto))
 	for i, sd := range skillsDto {
 		s, err := NewSkill(
-			ulid.NewULID(),
 			sd.TagID,
 			sd.Evaluation,
 			sd.Year,
@@ -56,7 +54,7 @@ func Create(
 	}
 
 	// パスワードのインスタンスを作成
-	password, err := newUserPassword(reqPassword)
+	newUserPassword, err := NewUserPassword(password)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +63,7 @@ func Create(
 		ulid.NewULID(),
 		name,
 		email,
-		password,
+		newUserPassword,
 		profile,
 		skills,
 		careers,
