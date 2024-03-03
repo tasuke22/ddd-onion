@@ -97,7 +97,6 @@ func (h handler) UpdateUser(ctx *gin.Context) {
 	settings.ReturnStatusNoContent(ctx)
 }
 
-// UpdateSkillRequest から UpdateSkillDto への変換
 func (h handler) convertUpdateSkillRequestsToUpdateSkillInputDtos(skills []UpdateSkillRequest) []userUseCase.UpdateSkillDto {
 	var skillsDtos []userUseCase.UpdateSkillDto
 	for _, skill := range skills {
@@ -112,7 +111,6 @@ func (h handler) convertUpdateSkillRequestsToUpdateSkillInputDtos(skills []Updat
 	return skillsDtos
 }
 
-// UpdateCareerRequest から UpdateCareerDto への変換
 func (h handler) convertUpdateCareerRequestsToUpdateCareerInputDtos(careers []UpdateCareerRequest) []userUseCase.UpdateCareerDto {
 	var careersDtos []userUseCase.UpdateCareerDto
 	for _, career := range careers {

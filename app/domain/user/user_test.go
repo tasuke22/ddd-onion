@@ -12,7 +12,7 @@ func TestNewUser(t *testing.T) {
 	validID := ulid.NewULID()
 	validName := "Valid Name"
 	validEmail := "valid@example.com"
-	validPassword, _ := newUserPassword("ValidPassword123")
+	validPassword, _ := NewUserPassword("ValidPassword123")
 	validProfile := "Valid Profile"
 	validSkills := []Skill{{}}
 	validCareers := []Career{{}}

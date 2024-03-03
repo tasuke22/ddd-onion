@@ -39,7 +39,7 @@ func TestNewUserPassword(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := newUserPassword(test.password)
+			_, err := NewUserPassword(test.password)
 			if test.wantError {
 				assert.Error(t, err)
 			} else {

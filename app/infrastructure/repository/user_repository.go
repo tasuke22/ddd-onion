@@ -87,7 +87,6 @@ func (ur *userRepository) FindByUserID(ctx context.Context, id string) (*user.Us
 		}
 		careersDomain = append(careersDomain, *cd)
 	}
-	fmt.Println("careeeeeee")
 
 	skills, err := query.FindSkillsByUserID(ctx, id)
 	var skillsDomain []user.Skill
@@ -116,7 +115,6 @@ func (ur *userRepository) FindByUserID(ctx context.Context, id string) (*user.Us
 		skillsDomain,
 		careersDomain,
 	)
-	fmt.Println("userDomain")
 
 	return userDomain, nil
 }

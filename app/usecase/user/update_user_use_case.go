@@ -2,9 +2,9 @@ package user
 
 import (
 	"context"
+	errDomain "github.com/tasuke/go-onion/domain/error"
 	tagDomain "github.com/tasuke/go-onion/domain/tag"
 	userDomain "github.com/tasuke/go-onion/domain/user"
-	"github.com/tasuke/go-pkg/ulid"
 )
 
 type UpdateUserUseCase struct {
@@ -50,7 +50,7 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 	// ユーザーの存在確認
 	user, err := uc.userRepo.FindByUserID(ctx, input.UserID)
 	if err != nil {
-		return err
+		return errDomain.NotFoundErr
 	}
 
 	// スキルの更新または追加
@@ -65,7 +65,6 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 			if existingSkill.ID() == skillReq.ID {
 				found = true
 				skill, err = userDomain.NewSkill(
-					skillReq.ID,
 					skillReq.TagID,
 					skillReq.Evaluation,
 					skillReq.Years,
@@ -76,15 +75,12 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 
 		// 新規作成
 		if !found {
-			skill, err = userDomain.NewSkill(
-				ulid.NewULID(),
+			skill, err = userDomain.ReconstructSkill(
+				skillReq.ID,
 				skillReq.TagID,
 				skillReq.Evaluation,
 				skillReq.Years,
 			)
-			if err != nil {
-				return err
-			}
 		}
 
 		if skill != nil {
@@ -103,7 +99,7 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 			// 更新
 			if existingCareer.ID() == careerReq.ID {
 				found = true
-				career, err = userDomain.NewCareer(
+				career, err = userDomain.ReconstructCareer(
 					careerReq.ID,
 					careerReq.Detail,
 					careerReq.StartYear,
@@ -116,14 +112,10 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 		// 新規作成
 		if !found {
 			career, err = userDomain.NewCareer(
-				ulid.NewULID(),
 				careerReq.Detail,
 				careerReq.StartYear,
 				careerReq.EndYear,
 			)
-			if err != nil {
-				return err
-			}
 		}
 
 		if career != nil {
@@ -131,21 +123,19 @@ func (uc *UpdateUserUseCase) Run(ctx context.Context, input *UpdateUserUseCaseIn
 		}
 	}
 
-	// ユーザーオブジェクトのスキルとキャリアを更新
-	if err := user.Update(
+	updatedUser, err := userDomain.ReconstructUser(
+		input.UserID,
 		input.Name,
 		input.Email,
-		userDomain.UserPassword(input.Password),
+		userDomain.ConvertToUserPassword(input.Password),
 		input.Profile,
 		skills,
 		careers,
-	); err != nil {
-		return err
-	}
+	)
 
 	// 更新されたユーザー情報をデータベースに保存
-	if err := uc.userRepo.UpdateUser(ctx, user); err != nil {
-		return err
+	if err := uc.userRepo.UpdateUser(ctx, updatedUser); err != nil {
+		return errDomain.NewError("ユーザーの更新中にエラーが発生しました: " + err.Error()) // エラーメッセージの修正
 	}
 	return nil
 }

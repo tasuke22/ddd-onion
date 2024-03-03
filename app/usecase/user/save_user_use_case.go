@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	errDomain "github.com/tasuke/go-onion/domain/error"
 	tagDomain "github.com/tasuke/go-onion/domain/tag"
 	userDomain "github.com/tasuke/go-onion/domain/user"
 )
@@ -122,7 +123,7 @@ func (uc *SaveUserUseCase) processTags(ctx context.Context, skills []SkillInputD
 	// リクエストのユニークなタグ名を、DBから取得してくる
 	existingTags, err := uc.tagRepo.FindByNames(ctx, uniqueTagNames)
 	if err != nil {
-		return nil, err
+		return nil, errDomain.NotFoundErr
 	}
 
 	// 1. 既存のタグをマップに追加
@@ -137,11 +138,11 @@ func (uc *SaveUserUseCase) processTags(ctx context.Context, skills []SkillInputD
 			// タグが存在しない場合は新規登録
 			newTag, err := tagDomain.NewTag(tagName)
 			if err != nil {
-				return nil, err
+				return nil, errDomain.NewError("新しいタグの作成に失敗しました: " + err.Error())
 			}
 			// タグをDBに保存
 			if err = uc.tagRepo.Store(ctx, newTag); err != nil {
-				return nil, err
+				return nil, errDomain.NewError("タグの保存に失敗しました: " + err.Error())
 			}
 			// タグをマップに追加
 			tagsMap[tagName] = newTag.ID()
