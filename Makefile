@@ -1,5 +1,5 @@
 .PHONY: help
-include .env
+#include .env
 
 help:
 	@grep "^[a-zA-Z\-]*:" Makefile | grep -v "grep" | sed -e 's/^/make /' | sed -e 's/://'
