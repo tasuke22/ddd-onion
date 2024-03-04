@@ -44,11 +44,6 @@ type SkillInputDto struct {
 }
 
 func (uc *SaveUserUseCase) Run(ctx context.Context, input *SaveUserUseCaseInputDto) error {
-	// ユーザー名の重複チェック TODO
-	//if err := uc.checkUserExists(ctx, input.Name); err != nil {
-	//	return err
-	//}
-
 	// タグの処理 ここを修正したい
 	tagsMap, err := uc.processTags(ctx, input.Skills)
 	//{
@@ -111,11 +106,6 @@ func (uc *SaveUserUseCase) createUserDomain(request *SaveUserUseCaseInputDto, ta
 	)
 }
 
-func (uc *SaveUserUseCase) checkUserExists(ctx context.Context, name string) error {
-	_, err := uc.userRepo.FindByName(ctx, name)
-	return err
-}
-
 func (uc *SaveUserUseCase) processTags(ctx context.Context, skills []SkillInputDto) (map[string]string, error) {
 	// リクエストからユニークなタグ名のスライスを抽出
 	uniqueTagNames := extractUniqueTagNames(skills)
@@ -153,7 +143,6 @@ func (uc *SaveUserUseCase) processTags(ctx context.Context, skills []SkillInputD
 	return tagsMap, nil
 }
 
-// extractUniqueTagNames はスキルのスライスからユニークなタグ名のスライスを抽出して返します。
 func extractUniqueTagNames(skills []SkillInputDto) []string {
 	uniqueTags := make(map[string]struct{}) // ユニークなタグ名を保持するマップ
 
