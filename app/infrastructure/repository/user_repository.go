@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"github.com/tasuke/go-onion/domain/user"
 	"github.com/tasuke/go-onion/infrastructure/db"
 	"github.com/tasuke/go-onion/infrastructure/db/dbgen"
@@ -52,18 +51,6 @@ func (ur *userRepository) Save(ctx context.Context, u *user.User) error {
 	}
 
 	return nil
-}
-
-func (ur *userRepository) FindByName(ctx context.Context, name string) (*user.User, error) {
-	query := db.GetQuery(ctx)
-	tempUser, err := query.FindByName(ctx, name)
-
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(tempUser)
-
-	return nil, err
 }
 
 func (ur *userRepository) FindByUserID(ctx context.Context, id string) (*user.User, error) {
