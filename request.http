@@ -4,7 +4,7 @@ GET http://localhost:8080/v1/health
 
 ###
 # ユーザーの新規登録
-POST http://localhost:8080/v1/users/save
+POST http://localhost:8080/v1/users/register
 
 {
   "name": "ユーザー名",
@@ -13,7 +13,7 @@ POST http://localhost:8080/v1/users/save
   "profile": "プロフィール説明文",
   "skills": [
     {
-      "evaluation": 5,
+      "evaluation": 10,
       "years": 3,
       "tag_name": "Go"
     },
